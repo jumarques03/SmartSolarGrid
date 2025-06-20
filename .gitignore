@@ -8,7 +8,7 @@ __pycache__/
 
 # Virtual environment
 venv/
-.venv/
+venv/
 
 # IDE and editor files
 .vscode/        # VS Code specific files
