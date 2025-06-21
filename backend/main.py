@@ -14,14 +14,14 @@ def corpo_resposta_para_Alexa(texto, acabar_sessao):
                 "shouldEndSession": acabar_sessao
             }
         }
-    return resposta
+    
+    return JSONResponse(content=resposta, status_code=200)   # Retorna uma resposta HTTP no formato JSON
 
-def erro(e):
+def resposta_erro_padrao(e):
     print(e)
-    resposta_erro=corpo_resposta_para_Alexa("Desculpe, houve um problema ao processar sua solicitação.", True)
-    return JSONResponse(content=resposta_erro, status_code=200) 
+    corpo_resposta_para_Alexa("Desculpe, houve um problema ao processar sua solicitação.", True)
 
-@app.post("/status-inversor")
+@app.post("/alexa/status-inversor")
 async def saber_status_inversor(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
@@ -34,12 +34,14 @@ async def saber_status_inversor(request: Request):
 
         # Resposta no formato que a Alexa espera receber
         resposta=corpo_resposta_para_Alexa(texto_resposta, False)
-        return JSONResponse(content=resposta, status_code=200)   # Retorna uma resposta HTTP no formato JSON
-    
+        return resposta
+        
     except Exception as e:
-        return erro(e)
+        return resposta_erro_padrao(e)
     
-@app.post("/acionar-cargas-prioritarias")
+# Função para site receber o status do inversor
+
+@app.post("/alexa/acionar-cargas-prioritarias")
 async def acionar_cargas_prioritarias(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
@@ -51,7 +53,9 @@ async def acionar_cargas_prioritarias(request: Request):
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
         resposta=corpo_resposta_para_Alexa(texto_resposta, False)
-        return JSONResponse(content=resposta, status_code=200)
+        return resposta
     
     except Exception as e:
-        return erro(e)
+        return resposta_erro_padrao(e)
+
+# Função para site saber quais cargas prioritárias estão ativas
