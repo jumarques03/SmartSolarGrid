@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao
+from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao
 
 rota_alexa= APIRouter(prefix="/alexa")
 

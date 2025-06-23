@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from alexa.rotas import rota_alexa
+from backend.alexa.rotas import rota_alexa
 
 
 app=FastAPI()
