@@ -20,7 +20,7 @@ async def saber_status_inversor(request: Request):
         
     except Exception as e:
         return resposta_erro_padrao(e)
-    
+
 @rota_alexa.post("/acionar-cargas-prioritarias")
 async def acionar_cargas_prioritarias(request: Request):
     try: 
