@@ -4,7 +4,7 @@ from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa,
 rota_alexa= APIRouter(prefix="/alexa")
 
 @rota_alexa.post("/status-inversor")
-async def saber_status_inversor(request: Request):
+async def alexa_saber_status_inversor(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
@@ -22,7 +22,7 @@ async def saber_status_inversor(request: Request):
         return resposta_erro_padrao(e)
 
 @rota_alexa.post("/acionar-cargas-prioritarias")
-async def acionar_cargas_prioritarias(request: Request):
+async def alexa_acionar_cargas_prioritarias(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
@@ -39,7 +39,7 @@ async def acionar_cargas_prioritarias(request: Request):
         return resposta_erro_padrao(e)
     
 @rota_alexa.post("/armazenar-energia")
-async def armazenar_energia(request: Request):
+async def alexa_armazenar_energia(request: Request):
     try:
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
@@ -56,7 +56,7 @@ async def armazenar_energia(request: Request):
         return resposta_erro_padrao(e)
     
 @rota_alexa.post("/ativar-modo")
-async def ativar_modo(request: Request):
+async def alexa_ativar_modo(request: Request):
     try:
         corpo_intent = await request.json()
         intent = corpo_intent["request"]["intent"]["name"]
