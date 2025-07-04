@@ -12,7 +12,7 @@ def corpo_resposta_para_Alexa(texto, acabar_sessao):
             }
         }
     
-    return JSONResponse(content=resposta, status_code=200)   # Retorna uma resposta HTTP no formato JSON
+    return JSONResponse(content=resposta)   # Retorna uma resposta HTTP no formato JSON
 
 def resposta_erro_padrao(e):
     print(e)
