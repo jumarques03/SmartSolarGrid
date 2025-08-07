@@ -10,7 +10,7 @@ async def alexa_saber_status_inversor(request: Request):
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
         if intent== "StatusInversorIntent":
-            texto_resposta = "Status Inversor...."    # Aqui ocorreria uma requisição para a API da Goodwe 
+            texto_resposta = "Status Inversor...."    # Alexa falará sobre o inversor (se está tudo normal, se tem alguma coisa a ser feita...)
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
@@ -21,14 +21,14 @@ async def alexa_saber_status_inversor(request: Request):
     except Exception as e:
         return resposta_erro_padrao(e)
 
-@rota_alexa.post("/acionar-cargas-prioritarias")
-async def alexa_acionar_cargas_prioritarias(request: Request):
+@rota_alexa.post("/dica-economia")
+async def alexa_dica_de_economia(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
-        if intent== "AcionarCargasPrioritariasIntent":
-            texto_resposta= "Acionando cargas prioritárias..."   # Aqui ocorreria uma requisição para a API da Goodwe 
+        if intent== "DicaEconomiaIntent":
+            texto_resposta= "A minha dica é..."   # Alexa dará uma sugestão baseada no consumo de energia da casa 
         else:
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
@@ -37,15 +37,15 @@ async def alexa_acionar_cargas_prioritarias(request: Request):
     
     except Exception as e:
         return resposta_erro_padrao(e)
-    
-@rota_alexa.post("/armazenar-energia")
-async def alexa_armazenar_energia(request: Request):
+ 
+@rota_alexa.post("/nivel-energia-bateria")
+async def alexa_nivel_energia_bateria(request: Request):
     try:
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
-        if intent== "ArmazenarEnergiaIntent":
-            texto_resposta = "Armazenando energia...."    # Aqui ocorreria uma requisição para a API da Goodwe 
+        if intent== "NivelBateriaIntent":
+            texto_resposta = "Nível da bateria...."    # Alexa falará o nivel da bateria e mostrará se ela está carregando ou sendo consumida
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
@@ -54,26 +54,4 @@ async def alexa_armazenar_energia(request: Request):
         
     except Exception as e:
         return resposta_erro_padrao(e)
-    
-@rota_alexa.post("/ativar-modo")
-async def alexa_ativar_modo(request: Request):
-    try:
-        corpo_intent = await request.json()
-        intent = corpo_intent["request"]["intent"]["name"]
 
-        if intent == "AtivarModoIntent":
-            slot_valor = corpo_intent["request"]["intent"]["slots"]["modo"]["value"]
-
-            if slot_valor.lower() == "on":
-                texto_resposta = "Ativando modo On Grid..." # Aqui ocorreria uma requisição para a API da Goodwe 
-            elif slot_valor.lower() == "off":
-                texto_resposta = "Ativando modo Off Grid..."    # Aqui ocorreria uma requisição para a API da Goodwe 
-            else:
-                texto_resposta = "Modo informado não é reconhecido."
-
-        else:
-            texto_resposta = "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
-
-        return corpo_resposta_para_Alexa(texto_resposta, False)
-    except Exception as e:
-        return resposta_erro_padrao(e)
