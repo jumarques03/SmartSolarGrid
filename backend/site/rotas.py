@@ -1,27 +1,22 @@
 from fastapi import APIRouter
 import requests
-from dados_simulados.status_inversor_simulado import status_inversor
-from dados_simulados.nivel_bateria_simulado import nivel_bateria
+from simulacoes.status_inversor_simulado import status_inversor
+from models.cargas import CargasPrioritarias
 
 rota_site= APIRouter(prefix="/site")
 
 @rota_site.get("/status-inversor")
 async def site_saber_status_inversor():
-   status_inversor() 
+    return status_inversor() 
 
-@rota_site.get("/nivel-da-bateria")
-async def site_nivel_da_bateria():
-    nivel_bateria()
+@rota_site.post("/escolher_cargas_prioritarias")
+async def site_escolher_cargas_prioritarias(dispositivo: CargasPrioritarias):
 
-@rota_site.get("/escolher_cargas_prioritarias")
-async def site_escolher_cargas_prioritarias():
-    '''
-    Usuário escolhe as cargas prioritárias por meio de digitação dos nomes dos dispositivos
-    '''
-    pass
+    dispositivos_prioritarios = dispositivo.nome
+    return {"mensagem": "Cargas prioritárias registradas com sucesso!", "cargas": dispositivos_prioritarios}
 
 @rota_site.get("/lista-cargas-prioritarias")
-async def site_lista_das_cargas_prioritarias():
+async def site_lista_de_cargas_prioritarias():
     pass
 
 

@@ -37,21 +37,3 @@ async def alexa_dica_de_economia(request: Request):
     
     except Exception as e:
         return resposta_erro_padrao(e)
- 
-@rota_alexa.post("/nivel-energia-bateria")
-async def alexa_nivel_energia_bateria(request: Request):
-    try:
-        corpo_intent= await request.json()  # Espera receber o corpo do intent
-        intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
-
-        if intent== "NivelBateriaIntent":
-            texto_resposta = "Nível da bateria...."    # Alexa falará o nivel da bateria e mostrará se ela está carregando ou sendo consumida
-        else:
-            texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
-
-        resposta=corpo_resposta_para_Alexa(texto_resposta, False)
-        return resposta
-        
-    except Exception as e:
-        return resposta_erro_padrao(e)
-
