@@ -34,17 +34,21 @@ async def site_clima(local: str):
     load_dotenv()
     api_chave = os.getenv("API_KEY")
 
-    url = f"http://api.weatherapi.com/v1/current.json?key={api_chave}&lang=pt&q={local}&aqi=no" 
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_chave}&lang=pt&q={local}&aqi=no&alerts=no" 
     resposta = requests.get(url)
     resposta = resposta.json()
 
     infos_clima = {
-        "ultima atualizacao": f"{resposta['current']['last_updated']}",
-        "temperatura": f"{resposta['current']['temp_c']}°C",
-        "é dia?": f"{resposta['current']['is_day']}",
-        "cobertura nuvens (%)": f"{resposta['current']['cloud']}%",
-        "preciptacao (mm)": f"{resposta['current']['precip_mm']}mm"
-        }
+        "dia": resposta['forecast']['forecastday'][0]['date'],
+        "temperatura maxima": f"{resposta['forecast']['forecastday'][0]['day']['maxtemp_c']}°C",
+        "temperatura minima": f"{resposta['forecast']['forecastday'][0]['day']['mintemp_c']}°C",
+        "temperatura media": f"{resposta['forecast']['forecastday'][0]['day']['avgtemp_c']}°C",
+        "preciptacao total (mm)": f"{resposta['forecast']['forecastday'][0]['day']['totalprecip_mm']}mm",
+        "chance de chuva(%)": f"{resposta['forecast']['forecastday'][0]['day']['daily_chance_of_rain']}%",
+        "indice UV (intensidade da radiação solar)": resposta['forecast']['forecastday'][0]['day']['uv'],
+        "nascer do sol": resposta['forecast']['forecastday'][0]['astro']['sunrise'],
+        "por do sol": resposta['forecast']['forecastday'][0]['astro']['sunset']
+    }
 
     return infos_clima
 
