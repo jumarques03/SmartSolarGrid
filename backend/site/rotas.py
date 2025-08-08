@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 import requests
-from simulacoes.status_inversor_simulado import status_inversor
+from simulacoes.status_inversor_simulado import info_inversor
 from models.cargas import CargasPrioritarias
 
 rota_site= APIRouter(prefix="/site")
 
 @rota_site.get("/status-inversor")
 async def site_saber_status_inversor():
-    return status_inversor() 
+    return info_inversor() 
 
 @rota_site.post("/escolher_cargas_prioritarias")
 async def site_escolher_cargas_prioritarias(dispositivo: CargasPrioritarias):

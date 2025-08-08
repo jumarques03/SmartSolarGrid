@@ -1,16 +1,18 @@
 from fastapi import APIRouter, Request
 from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao
+from simulacoes.status_inversor_simulado import info_inversor
 
 rota_alexa= APIRouter(prefix="/alexa")
 
-@rota_alexa.post("/status-inversor")
-async def alexa_saber_status_inversor(request: Request):
+@rota_alexa.post("/info-inversor")
+async def alexa_saber_info_inversor(request: Request):
     try: 
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
         if intent== "StatusInversorIntent":
-            texto_resposta = "Status Inversor...."    # Alexa falará sobre o inversor (se está tudo normal, se tem alguma coisa a ser feita...)
+            infos_inversor = info_inversor()
+            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
