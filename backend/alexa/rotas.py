@@ -12,6 +12,7 @@ async def alexa_saber_info_inversor(request: Request):
 
         if intent== "StatusInversorIntent":
             infos_inversor = info_inversor()
+            
             texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"

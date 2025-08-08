@@ -19,7 +19,6 @@ async def site_escolher_cargas_prioritarias(dispositivo: CargasPrioritarias):
 async def site_lista_de_cargas_prioritarias():
     pass
 
-
 @rota_site.get("/historico-de-consumo")
 async def site_historico_de_consumo():
     pass
