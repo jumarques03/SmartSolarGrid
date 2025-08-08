@@ -1,7 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter 
 import requests
 from simulacoes.status_inversor_simulado import info_inversor
 from models.cargas import CargasPrioritarias
+import os
+from dotenv import load_dotenv
 
 rota_site= APIRouter(prefix="/site")
 
@@ -28,11 +30,21 @@ async def site_dica_de_economia():
     pass
 
 @rota_site.get("/clima")
-async def site_clima():
-    '''
-    Clima da região onde o usuário está, chatbot usará isso para falar sugestões dicas...
-    '''
-    
-    url = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,relative_humidity_2m,cloud_cover,precipitation_probability,precipitation,rain,direct_radiation_instant"
-    pass
+async def site_clima(local: str):
+    load_dotenv()
+    api_chave = os.getenv("API_KEY")
+
+    url = f"http://api.weatherapi.com/v1/current.json?key={api_chave}&lang=pt&q={local}&aqi=no" 
+    resposta = requests.get(url)
+    resposta = resposta.json()
+
+    infos_clima = {
+        "ultima atualizacao": f"{resposta['current']['last_updated']}",
+        "temperatura": f"{resposta['current']['temp_c']}°C",
+        "é dia?": f"{resposta['current']['is_day']}",
+        "cobertura nuvens (%)": f"{resposta['current']['cloud']}%",
+        "preciptacao (mm)": f"{resposta['current']['precip_mm']}mm"
+        }
+
+    return infos_clima
 
