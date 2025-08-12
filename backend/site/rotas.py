@@ -1,9 +1,9 @@
 from fastapi import APIRouter 
 import requests
 from simulacoes.status_inversor_simulado import info_inversor
-from models.cargas import CargasPrioritarias
 import os
 from dotenv import load_dotenv
+from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias
 
 rota_site= APIRouter(prefix="/site")
 
@@ -12,14 +12,27 @@ async def site_saber_status_inversor():
     return info_inversor() 
 
 @rota_site.post("/escolher_cargas_prioritarias")
-async def site_escolher_cargas_prioritarias(dispositivo: CargasPrioritarias):
-
-    dispositivos_prioritarios = dispositivo.nome
-    return {"mensagem": "Cargas prioritárias registradas com sucesso!", "cargas": dispositivos_prioritarios}
+async def site_escolher_cargas_prioritarias(dispositivo: str):
+    cargas = ler_cargas()
+    novo_id = str(len(cargas) + 1)
+    cargas[novo_id] = dispositivo
+    salvar_cargas_prioritarias(cargas)
+    return {"mensagem": "Carga prioritária registrada com sucesso!"}
 
 @rota_site.get("/lista-cargas-prioritarias")
 async def site_lista_de_cargas_prioritarias():
-    pass
+    cargas = ler_cargas()
+    return {"cargas prioritarias": cargas}
+
+@rota_site.delete("/remover_carga_prioritaria")
+async def site_remover_carga(carga_id: str):
+    cargas = ler_cargas()
+    if carga_id in cargas:
+        removida = cargas.pop(carga_id)
+        salvar_cargas_prioritarias(cargas)
+        return {"mensagem": f"Carga '{removida}' removida com sucesso!"}
+    else:
+        return {"erro": "ID da carga não encontrado."}
 
 @rota_site.get("/historico-de-consumo")
 async def site_historico_de_consumo():
