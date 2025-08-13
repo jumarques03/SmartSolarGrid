@@ -4,6 +4,7 @@ from simulacoes.status_inversor_simulado import info_inversor
 import os
 from dotenv import load_dotenv
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias
+from backend.graficos.graficos import mapa_de_calor, histograma
 
 rota_site= APIRouter(prefix="/site")
 
@@ -36,7 +37,23 @@ async def site_remover_carga(carga_id: str):
 
 @rota_site.get("/historico-de-consumo")
 async def site_historico_de_consumo():
-    pass
+    lista_de_mapas_e_graficos = []
+
+    producao_de_energia =  mapa_de_calor('FV(W)', 'Mapa de Calor: Produção de Energia por Hora x Dia')
+    lista_de_mapas_e_graficos.append(producao_de_energia)
+
+    rede_eletrica = mapa_de_calor('Rede elétrica (W)', 'Mapa de Calor: Rede Elétrica por Hora x Dia')
+    lista_de_mapas_e_graficos.append(rede_eletrica)
+
+    carga_consumida = mapa_de_calor('Carga(W)','Mapa de Calor: Carga Consumida pela Residência por Hora x Dia')
+    lista_de_mapas_e_graficos.append(carga_consumida)
+    
+    nivel_bateria = histograma()
+    lista_de_mapas_e_graficos.append(nivel_bateria)
+
+    # ver como fazer sobre os Dados da Bateria(W)
+
+    return lista_de_mapas_e_graficos
 
 @rota_site.get("/dica_economia")
 async def site_dica_de_economia():
