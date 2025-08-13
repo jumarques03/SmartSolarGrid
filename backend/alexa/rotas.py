@@ -40,3 +40,8 @@ async def alexa_dica_de_economia(request: Request):
     
     except Exception as e:
         return resposta_erro_padrao(e)
+    
+
+@rota_alexa.post("/cargas-prioritarias")
+async def alexa_saber_cargas_prioritarias(request: Request):
+    pass

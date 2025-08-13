@@ -3,7 +3,7 @@ import random
 import openpyxl
 
 def info_inversor():
-    dados= pd.read_excel(r"dados\dados_gerais_inversor (2).xlsx")
+    dados= pd.read_excel(r"dados\dados_finais_inversor.xlsx")
 
     dicionario_dados = dados.to_dict(orient="records")
     n = random.randint(0, len(dicionario_dados) - 1)
