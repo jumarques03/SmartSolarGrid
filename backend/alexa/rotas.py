@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao
+from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas
 from simulacoes.status_inversor_simulado import info_inversor
 
 rota_alexa= APIRouter(prefix="/alexa")
@@ -13,7 +13,7 @@ async def alexa_saber_info_inversor(request: Request):
         if intent== "StatusInversorIntent":
             infos_inversor = info_inversor()
             
-            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"
+            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"   # Dar uma melhorada na resposta
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
@@ -49,7 +49,8 @@ async def alexa_saber_cargas_prioritarias(request: Request):
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
         if intent== "SaberCargasPrioritarias":
-            texto_resposta= "Suas cargas prioritárias são..."   # Alexa dará uma resposta com base no json de cargas prioritárias
+            cargas = ler_cargas()
+            texto_resposta= f"Suas cargas prioritárias são: {cargas}" # Ver se as cargas estão voltando corretamente
         else:
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 

@@ -77,21 +77,23 @@ async def site_clima(local: str):
         load_dotenv()
         api_chave = os.getenv("API_KEY")
 
-        url = f"http://api.weatherapi.com/v1/forecast.json?key={api_chave}&lang=pt&q={local}&aqi=no&alerts=no" 
+        url = f"https://api.hgbrasil.com/weather?key={api_chave}&city_name={local}" # Ex de local: Diadema,SP --> Aceita apenas cidades
         resposta = requests.get(url)
         resposta = resposta.json()
 
+
         infos_clima = {
-            "localizacao": resposta['location']['region'],
-            "dia": resposta['forecast']['forecastday'][0]['date'],
-            "temperatura maxima": f"{resposta['forecast']['forecastday'][0]['day']['maxtemp_c']}°C",
-            "temperatura minima": f"{resposta['forecast']['forecastday'][0]['day']['mintemp_c']}°C",
-            "temperatura media": f"{resposta['forecast']['forecastday'][0]['day']['avgtemp_c']}°C",
-            "preciptacao total (mm)": f"{resposta['forecast']['forecastday'][0]['day']['totalprecip_mm']}mm",
-            "chance de chuva(%)": f"{resposta['forecast']['forecastday'][0]['day']['daily_chance_of_rain']}%",
-            "indice UV (intensidade da radiação solar)": resposta['forecast']['forecastday'][0]['day']['uv'],
-            "nascer do sol": resposta['forecast']['forecastday'][0]['astro']['sunrise'],
-            "por do sol": resposta['forecast']['forecastday'][0]['astro']['sunset']
+            "localizacao": resposta['results']['city'],
+            "periodo do dia": resposta['results']['currently'],
+            "descricao": f"{resposta['results']['forecast'][0]['description']}",
+            "dia": resposta['results']['date'],
+            "temperatura maxima": f"{resposta['results']['forecast'][0]['max']}°C",
+            "temperatura minima": f"{resposta['results']['forecast'][0]['min']}°C",
+            "preciptacao total (mm)": f"{resposta['results']['forecast'][0]['rain']}mm",
+            "cobertura de nuvens (%)": f"{resposta['results']['forecast'][0]['cloudiness']}%",
+            "chance de chuva(%)": f"{resposta['results']['forecast'][0]['rain_probability']}%",
+            "nascer do sol": resposta['results']['sunrise'],
+            "por do sol": resposta['results']['sunset']
         }
 
         return infos_clima

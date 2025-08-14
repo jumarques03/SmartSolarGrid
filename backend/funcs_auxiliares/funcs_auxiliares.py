@@ -23,7 +23,7 @@ def resposta_erro_padrao(e):
 
 def ler_cargas():
     with open(caminho_arquivo, "r", encoding="utf-8") as f:
-        return json.load(f) # Adicionar tratamento de erro
+        return json.load(f)
     
 def salvar_cargas_prioritarias(lista):
     with open(caminho_arquivo, 'w', encoding="utf-8") as f:
