@@ -26,8 +26,5 @@ def ler_cargas():
         return json.load(f) # Adicionar tratamento de erro
     
 def salvar_cargas_prioritarias(lista):
-    try:
-        with open(caminho_arquivo, 'w', encoding="utf-8") as f:
-            json.dump(lista, f, indent=4)
-    except PermissionError as erro:
-        raise erro  # Arrumar mensagem de erro
+    with open(caminho_arquivo, 'w', encoding="utf-8") as f:
+        json.dump(lista, f, indent=4)
