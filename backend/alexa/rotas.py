@@ -48,7 +48,7 @@ async def alexa_saber_cargas_prioritarias(request: Request):
         corpo_intent= await request.json()  # Espera receber o corpo do intent
         intent=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
 
-        if intent== "SaberCargasPrioritarias":
+        if intent== "SaberCargasPrioritariasIntent":
             cargas = ler_cargas()
             texto_resposta= f"Suas cargas prioritárias são: {cargas}" # Ver se as cargas estão voltando corretamente
         else:

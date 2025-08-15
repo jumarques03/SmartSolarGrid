@@ -51,17 +51,17 @@ async def site_remover_carga(carga_id: str):
 async def site_historico_de_consumo():
     lista_de_mapas_e_graficos = []
 
-    producao_de_energia =  mapa_de_calor('FV(W)', 'Mapa de Calor: Produção de Energia por Hora x Dia')
-    lista_de_mapas_e_graficos.append(producao_de_energia) # Esse OK, só rever nome
+    geracao_solar =  mapa_de_calor('FV(W)', 'Mapa de Calor: Geração Solar(W) por Hora x Dia')
+    lista_de_mapas_e_graficos.append(geracao_solar) #OK
 
-    rede_eletrica = mapa_de_calor('Rede elétrica (W)', 'Mapa de Calor: Rede Elétrica por Hora x Dia')
-    lista_de_mapas_e_graficos.append(rede_eletrica) # Esse OK, só rever nome
+    energia_consumida_concessionaria = mapa_de_calor('Rede elétrica (W)', 'Mapa de Calor: Energia Consumida da Concessionária por Hora x Dia')
+    lista_de_mapas_e_graficos.append(energia_consumida_concessionaria) #OK
 
-    carga_consumida = mapa_de_calor('Carga(W)','Mapa de Calor: Carga Consumida pela Residência por Hora x Dia')
+    carga_consumida = mapa_de_calor('Carga(W)','Mapa de Calor: Consumo da Residência(W) por Hora x Dia')
     lista_de_mapas_e_graficos.append(carga_consumida)   # Rever esse, ficou estranho 
     
     nivel_bateria = histograma()    
-    lista_de_mapas_e_graficos.append(nivel_bateria) # OK, só rever nome
+    lista_de_mapas_e_graficos.append(nivel_bateria) #OK
 
     # ver como fazer sobre os Dados da Bateria(W)
 
