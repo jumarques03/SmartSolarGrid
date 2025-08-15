@@ -20,9 +20,10 @@ def mapa_de_calor(valor: str, titulo: str):
     plt.ylabel('Hora do Dia')
     plt.show()
 
-def histograma():
-    plt.hist(df['SOC(%)'], bins=5, alpha=0.7, color='skyblue', edgecolor='black')
-    plt.title('Histograma: Nível da Bateria (%)')
-    plt.xlabel('%')
-    plt.ylabel('Frequência')
+def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
+    plt.hist(df[valor], bins=intervalo, alpha=0.7, color='skyblue', edgecolor='black')
+    plt.title(titulo)
+    plt.xlabel(x)
+    plt.ylabel(y)
+    plt.legend([legenda])
     plt.show()

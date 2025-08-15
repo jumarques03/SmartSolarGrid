@@ -61,14 +61,16 @@ async def obter_historico_de_consumo():
         carga_consumida_grafico = mapa_de_calor('Carga(W)','Mapa de Calor: Consumo da Residência(W) por Hora x Dia')
         graficos.append(carga_consumida_grafico)   # Rever esse, ficou estranho 
         
-        nivel_bateria_grafico = histograma()    
+        nivel_bateria_grafico = histograma('SOC(%)', 5, 'Histrograma: Nível de Bateria(%)', 'Porcentagem da Bateria', 'Frequência', None)
         graficos.append(nivel_bateria_grafico) #OK
 
-        # ver como fazer sobre os Dados da Bateria(W)
+        dados_bateria_grafico=histograma('Dados da Bateria(W)', 20, 'Histograma: Uso da Bateria(W)', 'Watts', 'Frequência', None)
+        graficos.append(dados_bateria_grafico) # OK mas falta ver a legenda
 
         return graficos
     except:
         return {"mensagem":"Não foi possível carregar o histório de consumo."}
+        
 
 @rota_site.get("/dica_economia")
 async def obter_dica_economia():
