@@ -7,17 +7,16 @@ rota_alexa= APIRouter(prefix="/alexa")
 @rota_alexa.post("/info-inversor")
 async def obter_status_inversor_alexa(request: Request):
     try: 
-        corpo_intent= await request.json()  # Espera receber o corpo do intent_nome
-        intent_nome=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
+        corpo_intent= await request.json()  
+        intent_nome=corpo_intent["request"]["intent"]["name"]    
 
         if intent_nome== "StatusInversorIntent":
             infos_inversor = info_inversor()
             
-            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} por cento e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts" # VER SE A ALEXA VAI RESPONDER ISSO MESMO
+            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} por cento e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"
         else:
             texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
-        # Resposta no formato que a Alexa espera receber
         resposta=corpo_resposta_para_Alexa(texto_resposta, False)
         return resposta
         
@@ -27,11 +26,11 @@ async def obter_status_inversor_alexa(request: Request):
 @rota_alexa.post("/dica-economia")
 async def obter_dica_economia_alexa(request: Request):
     try: 
-        corpo_intent= await request.json()  # Espera receber o corpo do intent
-        intent_nome=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
+        corpo_intent= await request.json()  
+        intent_nome=corpo_intent["request"]["intent"]["name"]    
 
         if intent_nome== "DicaEconomiaIntent":
-            texto_resposta= "A minha dica é..."   # Alexa dará uma sugestão baseada no consumo de energia da casa 
+            texto_resposta= "A minha dica é..."  
         else:
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
@@ -45,12 +44,12 @@ async def obter_dica_economia_alexa(request: Request):
 @rota_alexa.post("/cargas-prioritarias")
 async def obter_cargas_prioritarias_alexa(request: Request):
     try: 
-        corpo_intent= await request.json()  # Espera receber o corpo do intent
-        intent_nome=corpo_intent["request"]["intent"]["name"]    # Acessando o nome do intent requerido pelo usuário
+        corpo_intent= await request.json()  
+        intent_nome=corpo_intent["request"]["intent"]["name"]    
 
         if intent_nome== "SaberCargasPrioritariasIntent":
             cargas = ler_cargas()
-            texto_resposta= f"Suas cargas prioritárias são: {cargas}" # Ver se as cargas estão voltando corretamente
+            texto_resposta= f"Suas cargas prioritárias são: {cargas}" # Arrumar a resposta das cargas
         else:
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
