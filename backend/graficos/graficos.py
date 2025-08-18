@@ -1,8 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from dotenv import load_dotenv
+import os
 
-dados= pd.read_excel(r"dados\dados_finais_inversor.xlsx")
+load_dotenv()
+caminho = os.getenv("CAMINHO")
+dados= pd.read_excel(caminho)
+
 
 df = pd.DataFrame(dados)
 df['Horário'] = pd.to_datetime(df['Horário'], format="%d.%m.%Y %H:%M:%S")
