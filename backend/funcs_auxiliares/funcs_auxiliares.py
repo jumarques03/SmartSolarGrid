@@ -34,3 +34,13 @@ def reorganizar_indices(cargas):
     for i, dispositivo in enumerate(cargas.values(), start=1):
         novas_cargas[i] = dispositivo
     return novas_cargas
+
+def acesso_cargas(cargas):
+    apenas_cargas=[]
+    for carga in cargas.values():
+        apenas_cargas.append(carga)    
+
+    separador = ", "
+    string_final_cargas = separador.join(apenas_cargas)
+    
+    return string_final_cargas

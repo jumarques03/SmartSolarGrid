@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas
+from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas
 from simulacoes.status_inversor_simulado import info_inversor
 
 rota_alexa= APIRouter(prefix="/alexa")
@@ -49,7 +49,7 @@ async def obter_cargas_prioritarias_alexa(request: Request):
 
         if intent_nome== "SaberCargasPrioritariasIntent":
             cargas = ler_cargas()
-            texto_resposta= f"Suas cargas prioritárias são: {cargas}" # Arrumar a resposta das cargas
+            texto_resposta= f"Suas cargas prioritárias são: {acesso_cargas(cargas)}" # Arrumar a resposta das cargas
         else:
             texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
 
