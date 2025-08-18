@@ -28,3 +28,9 @@ def ler_cargas():
 def salvar_cargas_prioritarias(lista):
     with open(caminho_arquivo, 'w', encoding="utf-8") as f:
         json.dump(lista, f, indent=4)
+
+def reorganizar_indices(cargas):
+    novas_cargas = {}
+    for i, dispositivo in enumerate(cargas.values(), start=1):
+        novas_cargas[i] = dispositivo
+    return novas_cargas

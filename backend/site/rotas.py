@@ -3,7 +3,7 @@ import requests
 from simulacoes.status_inversor_simulado import info_inversor
 import os
 from dotenv import load_dotenv
-from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias
+from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices
 from backend.graficos.graficos import mapa_de_calor, histograma
 
 rota_site= APIRouter(prefix="/site")
@@ -40,6 +40,7 @@ async def remover_carga_prioritaria(carga_id: str):
         cargas = ler_cargas()
         if carga_id in cargas:
             carga_removida = cargas.pop(carga_id)
+            cargas = reorganizar_indices(cargas)
             salvar_cargas_prioritarias(cargas)
             return {"mensagem": f"Carga '{carga_removida}' removida com sucesso!"}
         else:
