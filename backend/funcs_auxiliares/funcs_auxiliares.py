@@ -36,11 +36,6 @@ def reorganizar_indices(cargas):
     return novas_cargas
 
 def acesso_cargas(cargas):
-    apenas_cargas=[]
-    for carga in cargas.values():
-        apenas_cargas.append(carga)    
-
     separador = ", "
-    string_final_cargas = separador.join(apenas_cargas)
-    
+    string_final_cargas = separador.join(cargas.values())
     return string_final_cargas
