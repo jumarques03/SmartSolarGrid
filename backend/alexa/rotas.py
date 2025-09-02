@@ -39,7 +39,7 @@ async def alexa_webhook(request: Request):
                 texto_resposta = f"Suas cargas prioritárias são: {acesso_cargas(cargas)}"
 
             else:
-                texto_resposta = "Desculpe, não entendi sua solicitação! Pode repetir, por favor?"
+                texto_resposta = "Desculpe, não entendi sua solicitação! Você pode repetir, por favor?"
 
         # 3) SessionEndedRequest (quando a Alexa encerra a sessão)
         elif tipo_request == "SessionEndedRequest":
