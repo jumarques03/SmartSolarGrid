@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas 
 from simulacoes.status_inversor_simulado import info_inversor
+from backend.site.rotas import chatbot 
 
 rota_alexa = APIRouter(prefix="/alexa")
 
@@ -32,7 +33,7 @@ async def alexa_webhook(request: Request):
                 )
 
             elif intent_nome == "DicaIntent":
-                texto_resposta = "Minha dica de economia é: use os eletrodomésticos pesados durante o dia, aproveitando a geração solar."
+                texto_resposta = chatbot()
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()

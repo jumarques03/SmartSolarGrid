@@ -5,6 +5,9 @@ import os
 from dotenv import load_dotenv
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices
 from backend.graficos.graficos import serie_temporal, histograma
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from backend.chatbot.logica_chatbot import graph 
 
 rota_site= APIRouter(prefix="/site")
 
@@ -73,9 +76,19 @@ async def obter_historico_de_consumo():
         return {"mensagem":"Não foi possível carregar o histório de consumo."}
         
 
-@rota_site.get("/dica_economia")
-async def obter_dica_economia():
-    pass
+class Pergunta(BaseModel):
+    question: str
+
+# Endpoint simples do chatbot
+@rota_site.post("/assistente")
+async def chatbot(pergunta: Pergunta):
+    estado_final = graph.invoke({"question": pergunta.question})
+    resposta = estado_final["answer"]
+
+    return {
+        "pergunta": pergunta.question,
+        "resposta": resposta
+    }
 
 @rota_site.get("/clima")
 async def obter_clima(local: str):
