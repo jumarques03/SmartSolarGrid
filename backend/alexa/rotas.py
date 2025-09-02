@@ -15,15 +15,15 @@ async def alexa_webhook(request: Request):
         if tipo_request == "LaunchRequest":
             texto_resposta = (
                 "Bem-vindo ao SmartSolarGrid! "
-                "Você pode pedir o status do inversor, "
-                "uma dica de economia ou saber suas cargas prioritárias."
+                "Você pode pedir o status de seus aparelhos de energia, "
+                "uma dica sobre energia e consumo ou saber suas cargas prioritárias."
             )
 
         # 2) IntentRequest (quando o usuário pede algo)
         elif tipo_request == "IntentRequest":
             intent_nome = corpo_intent["request"]["intent"]["name"]
 
-            if intent_nome == "StatusInversorIntent":
+            if intent_nome == "StatusAparelhosDeEnergiaIntent":
                 infos_inversor = info_inversor()
                 texto_resposta = (
                     f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, "
@@ -31,7 +31,7 @@ async def alexa_webhook(request: Request):
                     f"e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts."
                 )
 
-            elif intent_nome == "DicaEconomiaIntent":
+            elif intent_nome == "DicaIntent":
                 texto_resposta = "Minha dica de economia é: use os eletrodomésticos pesados durante o dia, aproveitando a geração solar."
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
