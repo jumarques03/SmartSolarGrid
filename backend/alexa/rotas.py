@@ -1,60 +1,55 @@
 from fastapi import APIRouter, Request
-from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas
+
+from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas 
 from simulacoes.status_inversor_simulado import info_inversor
 
-rota_alexa= APIRouter(prefix="/alexa")
+rota_alexa = APIRouter(prefix="/alexa")
 
-@rota_alexa.post("/info-inversor")
-async def obter_status_inversor_alexa(request: Request):
-    try: 
-        corpo_intent= await request.json()  
-        intent_nome=corpo_intent["request"]["intent"]["name"]    
+@rota_alexa.post("/")
+async def alexa_webhook(request: Request):
+    try:
+        corpo_intent = await request.json()
+        tipo_request = corpo_intent["request"]["type"]
 
-        if intent_nome== "StatusInversorIntent":
-            infos_inversor = info_inversor()
-            
-            texto_resposta = f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, o nível de sua bateria é {infos_inversor['SOC(%)']} por cento e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts"
+        # 1) LaunchRequest (quando abre a skill)
+        if tipo_request == "LaunchRequest":
+            texto_resposta = (
+                "Bem-vindo ao SmartSolarGrid! "
+                "Você pode pedir o status do inversor, "
+                "uma dica de economia ou saber suas cargas prioritárias."
+            )
+
+        # 2) IntentRequest (quando o usuário pede algo)
+        elif tipo_request == "IntentRequest":
+            intent_nome = corpo_intent["request"]["intent"]["name"]
+
+            if intent_nome == "StatusInversorIntent":
+                infos_inversor = info_inversor()
+                texto_resposta = (
+                    f"Seu painel solar está gerando {infos_inversor['FV(W)']} Watts, "
+                    f"o nível de sua bateria é {infos_inversor['SOC(%)']} por cento "
+                    f"e sua rede está consumindo no total {infos_inversor['Carga(W)']} Watts."
+                )
+
+            elif intent_nome == "DicaEconomiaIntent":
+                texto_resposta = "Minha dica de economia é: use os eletrodomésticos pesados durante o dia, aproveitando a geração solar."
+
+            elif intent_nome == "SaberCargasPrioritariasIntent":
+                cargas = ler_cargas()
+                texto_resposta = f"Suas cargas prioritárias são: {acesso_cargas(cargas)}"
+
+            else:
+                texto_resposta = "Desculpe, não entendi sua solicitação! Pode repetir, por favor?"
+
+        # 3) SessionEndedRequest (quando a Alexa encerra a sessão)
+        elif tipo_request == "SessionEndedRequest":
+            texto_resposta = "Até logo! Obrigado por usar o SmartSolarGrid."
+
         else:
-            texto_resposta= "Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
+            texto_resposta = "Desculpe, ocorreu um problema ao processar sua solicitação."
 
-        resposta=corpo_resposta_para_Alexa(texto_resposta, False)
+        resposta = corpo_resposta_para_Alexa(texto_resposta, False)
         return resposta
-        
-    except Exception as e:
-        return resposta_erro_padrao(e)
 
-@rota_alexa.post("/dica-economia")
-async def obter_dica_economia_alexa(request: Request):
-    try: 
-        corpo_intent= await request.json()  
-        intent_nome=corpo_intent["request"]["intent"]["name"]    
-
-        if intent_nome== "DicaEconomiaIntent":
-            texto_resposta= "A minha dica é..."  
-        else:
-            texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
-
-        resposta=corpo_resposta_para_Alexa(texto_resposta, False)
-        return resposta
-    
-    except Exception as e:
-        return resposta_erro_padrao(e)
-    
-
-@rota_alexa.post("/cargas-prioritarias")
-async def obter_cargas_prioritarias_alexa(request: Request):
-    try: 
-        corpo_intent= await request.json()  
-        intent_nome=corpo_intent["request"]["intent"]["name"]    
-
-        if intent_nome== "SaberCargasPrioritariasIntent":
-            cargas = ler_cargas()
-            texto_resposta= f"Suas cargas prioritárias são: {acesso_cargas(cargas)}"
-        else:
-            texto_resposta="Desculpe, não entendi sua solicitação! Poderia repetir por favor?"
-
-        resposta=corpo_resposta_para_Alexa(texto_resposta, False)
-        return resposta
-    
     except Exception as e:
         return resposta_erro_padrao(e)
