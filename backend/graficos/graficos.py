@@ -8,27 +8,27 @@ load_dotenv()
 caminho = os.getenv("CAMINHO")
 dados= pd.read_excel(caminho)
 
-
 df = pd.DataFrame(dados)
 df['Horário'] = pd.to_datetime(df['Horário'], format="%d.%m.%Y %H:%M:%S")
+df = df.set_index('Horário')
+df2 = df.copy()
+df = df.resample('D').sum()
 
-def mapa_de_calor(valor: str, titulo: str):
-    df['Hora'] = pd.to_datetime(df['Horário']).dt.hour
-    df['Data'] = pd.to_datetime(df['Horário']).dt.date
-
-    mapa_calor = df.pivot_table(index='Hora', columns='Data', values=valor, aggfunc='mean')
-
-    plt.figure(figsize=(10, 6))
-    sns.heatmap(mapa_calor, cmap='Reds')
-    plt.title(titulo)
-    plt.xlabel('Dia')
-    plt.ylabel('Hora do Dia')
-    plt.show()
-
-def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
-    plt.hist(df[valor], bins=intervalo, alpha=0.7, color='skyblue', edgecolor='black')
+def serie_temporal(valor: str, cor: str, titulo: str, x: str, y: str):
+    plt.figure(figsize=(10, 8))
+    plt.plot(df.index, df[valor], marker='o', linestyle='-', markersize=4, color=cor)
     plt.title(titulo)
     plt.xlabel(x)
     plt.ylabel(y)
-    plt.legend([legenda])
+    plt.grid(True) 
+    plt.xticks(rotation=45)
+    plt.tight_layout() 
+    plt.show()
+
+def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
+    plt.hist(df2[valor], bins=intervalo, alpha=0.7, color='lightcoral', edgecolor='black')
+    plt.title(titulo)
+    plt.xlabel(x)
+    plt.ylabel(y)
+    plt.tight_layout() 
     plt.show()

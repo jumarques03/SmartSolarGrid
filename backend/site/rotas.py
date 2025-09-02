@@ -4,7 +4,7 @@ from simulacoes.status_inversor_simulado import info_inversor
 import os
 from dotenv import load_dotenv
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices
-from backend.graficos.graficos import mapa_de_calor, histograma
+from backend.graficos.graficos import serie_temporal, histograma
 
 rota_site= APIRouter(prefix="/site")
 
@@ -48,25 +48,25 @@ async def remover_carga_prioritaria(carga_id: str):
     except:
         return {"mensagem":"Não foi possível deletar sua carga prioritária."}
 
-@rota_site.get("/historico-de-consumo")
+@rota_site.get("/historico_de_consumo")
 async def obter_historico_de_consumo():
     try: 
         graficos = []
 
-        geracao_solar_grafico =  mapa_de_calor('FV(W)', 'Mapa de Calor: Geração Solar(W) por Hora x Dia')
-        graficos.append(geracao_solar_grafico) #OK
+        geracao_solar_grafico =  serie_temporal('FV(W)', 'g', 'Geração Solar(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        graficos.append(geracao_solar_grafico) 
 
-        energia_consumida_concessionaria_grafico = mapa_de_calor('Rede elétrica (W)', 'Mapa de Calor: Energia Consumida da Concessionária por Hora x Dia')
-        graficos.append(energia_consumida_concessionaria_grafico) #OK
+        energia_consumida_concessionaria_grafico = serie_temporal('Rede elétrica (W)', 'r', 'Energia Comprada da Concessionária(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        graficos.append(energia_consumida_concessionaria_grafico) 
 
-        carga_consumida_grafico = mapa_de_calor('Carga(W)','Mapa de Calor: Consumo da Residência(W) por Hora x Dia')
-        graficos.append(carga_consumida_grafico)   # Rever esse, ficou estranho 
+        carga_consumida_grafico = serie_temporal('Carga(W)','b','Consumo da Residência(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        graficos.append(carga_consumida_grafico)
+
+        dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        graficos.append(dados_bateria_grafico) #LEGENDA????
         
-        nivel_bateria_grafico = histograma('SOC(%)', 5, 'Histrograma: Nível de Bateria(%)', 'Porcentagem da Bateria', 'Frequência', None)
-        graficos.append(nivel_bateria_grafico) #OK
-
-        dados_bateria_grafico=histograma('Dados da Bateria(W)', 20, 'Histograma: Uso da Bateria(W)', 'Watts', 'Frequência', None)
-        graficos.append(dados_bateria_grafico) # OK mas falta ver a legenda
+        nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
+        graficos.append(nivel_bateria_grafico)
 
         return graficos
     except:
