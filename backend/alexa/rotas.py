@@ -33,7 +33,7 @@ async def alexa_webhook(request: Request):
                 )
 
             elif intent_nome == "DicaIntent":
-                texto_resposta = chatbot()
+                texto_resposta = "Minha dica de economia é: use os eletrodomésticos pesados durante o dia, aproveitando a geração solar."
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()
