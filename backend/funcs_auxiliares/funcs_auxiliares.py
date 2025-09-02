@@ -31,3 +31,8 @@ def salvar_cargas_prioritarias(lista):
             json.dump(lista, f, indent=4)
     except PermissionError as erro:
         raise erro  # Arrumar mensagem de erro
+    
+def acesso_cargas(cargas):
+    separador = ", "
+    string_final_cargas = separador.join(cargas.values())
+    return string_final_cargas
