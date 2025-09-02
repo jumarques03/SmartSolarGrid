@@ -11,7 +11,9 @@ from langchain_core.documents import Document
 from typing_extensions import List, TypedDict
 from langgraph.graph import START, StateGraph
 
-file_path = r"dados\CONTEXTO.pdf"
+load_dotenv()
+contexto = os.getenv("CONTEXTO")
+file_path = f"{contexto}"   #ARRUMAR FILE PATH
 pdf_loader = PyPDFLoader(file_path)
 
 load_dotenv()
