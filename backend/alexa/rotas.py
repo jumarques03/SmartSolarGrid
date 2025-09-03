@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
-
 from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas, dicas, obter_clima
 from simulacoes.status_inversor_simulado import info_inversor
+from backend.IA.llm import gerar_dica
 
 
 rota_alexa = APIRouter(prefix="/alexa")
@@ -17,7 +17,8 @@ async def alexa_webhook(request: Request):
             texto_resposta = (
                 "Bem-vindo ao SmartSolarGrid! "
                 "Você pode pedir o status de seus aparelhos de energia, "
-                "sua dica do dia sobre energia ou saber suas cargas prioritárias."
+                "o clima de sua cidade, "
+                "uma dica sobre energia com base no clima ou sem ele de base e saber suas cargas prioritárias."
             )
 
         # 2) IntentRequest (quando o usuário pede algo)
@@ -35,6 +36,16 @@ async def alexa_webhook(request: Request):
             elif intent_nome == "DicaIntent":
                 dica = dicas()
                 texto_resposta = f"Sua dica do dia é: {dica}" 
+            
+            elif intent_nome == "DicaClimaIntent":
+                try:
+                    cidade = corpo_intent["request"]["intent"]["slots"]["cidade"]["value"]
+                    clima = obter_clima(cidade)  # sua função que pega o clima
+                    infos_inversor = info_inversor()
+                    dica = gerar_dica(clima, infos_inversor)
+                    texto_resposta = f"Minha dica para é: {dica}"
+                except KeyError:
+                    texto_resposta = "Por favor, me diga a cidade para eu poder dar uma dica baseada no clima."
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()
@@ -46,12 +57,14 @@ async def alexa_webhook(request: Request):
                     clima = obter_clima(cidade)  # sua função agora recebe a cidade
                     
                     texto_resposta = (
-                        f"Em {clima['localizacao']}, no período da {clima['periodo_do_dia']}, "
+                        f"Em {clima['localizacao']},"
                         f"o clima é {clima['descricao']}. "
-                        f"A temperatura máxima será de {clima['temperatura_maxima']} graus celcius"
-                        f"e a mínima de {clima['temperatura_minima']}graus celcius. "
-                        f"A chance de chuva é de {clima['chance_de_chuva(%)']} por cento."
+                        f"A temperatura máxima será de {clima['temperatura_maxima']} "
+                        f"e a mínima de {clima['temperatura_minima']}. "
+                        f"A chance de chuva é de {clima['chance_de_chuva(%)']}"
+                        f" e as nuvens cobrirão {clima['cobertura_de_nuvens(%)']} do céu."
                     )
+
                 except KeyError:
                     texto_resposta = "Por favor, me diga o nome da cidade que deseja consultar."
 
