@@ -17,8 +17,8 @@ async def alexa_webhook(request: Request):
             texto_resposta = (
                 "Bem-vindo ao SmartSolarGrid! "
                 "Você pode pedir o status de seus aparelhos de energia, "
-                "o clima de sua cidade, "
-                "uma dica sobre energia com base no clima ou sem ele de base e saber suas cargas prioritárias."
+                "saber o clima de sua cidade, "
+                "a dica do dia sobre energia e saber suas cargas prioritárias."
             )
 
         # 2) IntentRequest (quando o usuário pede algo)
@@ -35,17 +35,7 @@ async def alexa_webhook(request: Request):
 
             elif intent_nome == "DicaIntent":
                 dica = dicas()
-                texto_resposta = f"Sua dica do dia é: {dica}" 
-            
-            elif intent_nome == "DicaClimaIntent":
-                try:
-                    cidade = corpo_intent["request"]["intent"]["slots"]["cidade"]["value"]
-                    clima = obter_clima(cidade)  # sua função que pega o clima
-                    infos_inversor = info_inversor()
-                    dica = gerar_dica(clima, infos_inversor)
-                    texto_resposta = f"Minha dica para é: {dica}"
-                except KeyError:
-                    texto_resposta = "Por favor, me diga a cidade para eu poder dar uma dica baseada no clima."
+                texto_resposta = f"Sua dica é: {dica}" 
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()
@@ -58,7 +48,7 @@ async def alexa_webhook(request: Request):
                     
                     texto_resposta = (
                         f"Em {clima['localizacao']},"
-                        f"o clima é {clima['descricao']}. "
+                        f"A descrição do clima é de {clima['descricao']}. "
                         f"A temperatura máxima será de {clima['temperatura_maxima']} "
                         f"e a mínima de {clima['temperatura_minima']}. "
                         f"A chance de chuva é de {clima['chance_de_chuva(%)']}"

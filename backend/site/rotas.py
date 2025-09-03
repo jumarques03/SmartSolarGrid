@@ -2,9 +2,7 @@ from fastapi import APIRouter
 from simulacoes.status_inversor_simulado import info_inversor
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
 from backend.graficos.graficos import serie_temporal, histograma
-from fastapi import APIRouter, HTTPException
-# from pydantic import BaseModel
-# from backend.chatbot.logica_chatbot import graph 
+from fastapi import APIRouter
 
 rota_site= APIRouter(prefix="/site")
 
@@ -72,9 +70,6 @@ async def obter_historico_de_consumo():
     except:
         return {"mensagem":"Não foi possível carregar o histório de consumo."}
         
-
-# class Pergunta(BaseModel):
-#     question: str
 
 # @rota_site.post("/assistente")
 # async def chatbot(pergunta: Pergunta):
