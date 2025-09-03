@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 
-from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas, dicas
+from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas, dicas, obter_clima
 from simulacoes.status_inversor_simulado import info_inversor
 
 
@@ -17,7 +17,7 @@ async def alexa_webhook(request: Request):
             texto_resposta = (
                 "Bem-vindo ao SmartSolarGrid! "
                 "Você pode pedir o status de seus aparelhos de energia, "
-                "uma dica sobre energia e consumo ou saber suas cargas prioritárias."
+                "sua dica do dia sobre energia ou saber suas cargas prioritárias."
             )
 
         # 2) IntentRequest (quando o usuário pede algo)
@@ -34,11 +34,19 @@ async def alexa_webhook(request: Request):
 
             elif intent_nome == "DicaIntent":
                 dica = dicas()
-                texto_resposta = f"Minha dica de economia é: {dica}" 
+                texto_resposta = f"Sua dica do dia é: {dica}" 
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()
                 texto_resposta = f"Suas cargas prioritárias são: {acesso_cargas(cargas)}"
+            
+            elif intent_nome == "ClimaIntent":
+                try:
+                    cidade = corpo_intent["request"]["intent"]["slots"]["cidade"]["value"]
+                    clima = obter_clima(cidade)  # sua função agora recebe a cidade
+                    texto_resposta = f"O clima em {cidade} é: {clima}"
+                except KeyError:
+                    texto_resposta = "Por favor, me diga o nome da cidade que deseja consultar."
 
             else:
                 texto_resposta = "Desculpe, não entendi sua solicitação! Você pode repetir, por favor?"

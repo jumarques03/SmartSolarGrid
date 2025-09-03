@@ -1,9 +1,6 @@
 from fastapi import APIRouter 
-import requests
 from simulacoes.status_inversor_simulado import info_inversor
-import os
-from dotenv import load_dotenv
-from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices
+from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
 from backend.graficos.graficos import serie_temporal, histograma
 from fastapi import APIRouter, HTTPException
 # from pydantic import BaseModel
@@ -79,42 +76,16 @@ async def obter_historico_de_consumo():
 # class Pergunta(BaseModel):
 #     question: str
 
-# # Endpoint simples do chatbot
 # @rota_site.post("/assistente")
 # async def chatbot(pergunta: Pergunta):
 #     estado_final = graph.invoke({"question": pergunta.question})
-#     resposta = estado_final["answer"]
-
 #     return {
 #         "pergunta": pergunta.question,
-#         "resposta": resposta
+#         "resposta": estado_final["answer"]
 #     }
 
 @rota_site.get("/clima")
-async def obter_clima(local: str):
-    try:
-        load_dotenv()
-        chave_api = os.getenv("API_KEY")
+async def clima(local: str):
+    clima = obter_clima(local)
 
-        url = f"https://api.hgbrasil.com/weather?key={chave_api}&city_name={local}" # Ex de local: Diadema,SP --> Aceita apenas cidades
-        resposta = requests.get(url)
-        resposta = resposta.json()
-
-
-        clima = {
-            "localizacao": resposta['results']['city'],
-            "periodo_do_dia": resposta['results']['currently'],
-            "descricao": f"{resposta['results']['forecast'][0]['description']}",
-            "dia": resposta['results']['date'],
-            "temperatura_maxima": f"{resposta['results']['forecast'][0]['max']}°C",
-            "temperatura_minima": f"{resposta['results']['forecast'][0]['min']}°C",
-            "preciptacao_total_(mm)": f"{resposta['results']['forecast'][0]['rain']}mm",
-            "cobertura_de_nuvens(%)": f"{resposta['results']['forecast'][0]['cloudiness']}%",
-            "chance_de_chuva(%)": f"{resposta['results']['forecast'][0]['rain_probability']}%",
-            "nascer_do_sol": resposta['results']['sunrise'],
-            "por_do_sol": resposta['results']['sunset']
-        }
-
-        return clima
-    except:
-        return {"mensagem":"Não foi possível acessar as informações do clima de sua cidade."}
+    return clima

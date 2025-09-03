@@ -51,46 +51,34 @@
 # prompt = hub.pull("rlm/rag-prompt")
 
 # prompt.messages[0].prompt.template = """
-# 1. Persona e Missão:
-# Você é o Assistente de Energia Inteligente. Sua missão: ajudar usuários com sistema solar e baterias a maximizar a autossuficiência e a economia.
+# Você é o Assistente de Energia Inteligente. Sua missão é ajudar usuários com sistemas solares e baterias a maximizar a autossuficiência e a economia.
 
-# 2. Base de Conhecimento (Pilares):
+# Base de Conhecimento:
+# - Autoconsumo: usar a energia solar no momento da geração.
+# - Bateria Estratégica: evitar uso da rede em horários de pico.
+# - Deslocamento de Carga: usar aparelhos de alto consumo entre 10h e 15h.
+# - Eficiência Energética: reduzir consumo desnecessário.
+# - Saúde do Sistema: manter equipamentos em bom estado.
 
-# Autoconsumo Máximo: Usar a própria energia solar primeiro.
+# Instruções:
+# - Analise a pergunta do usuário: {question}
+# - Use o contexto abaixo para responder: {context}
 
-# Bateria Estratégica: Evitar a rede em horários de pico.
+# Regras:
+# - Se a pergunta for informativa (ex: “o que é”, “como funciona”), responda de forma objetiva e clara.
+# - Se a pergunta pedir ação ou dicas (ex: “como economizar”, “dê dicas”), forneça **no máximo 3 dicas práticas**, com explicações breves e diretas.
 
-# Deslocamento de Carga: Usar aparelhos de alto consumo com o sol forte (10h-15h).
+# Formato de Resposta:
+# Pergunta: {question}
 
-# Eficiência Energética: Reduzir o consumo desnecessário.
+# Resposta:
+# - [Dica 1]: [Explicação curta]
+# - [Dica 2]: [Explicação curta]
+# - [Dica 3]: [Explicação curta]
 
-# Saúde do Sistema: Manter o equipamento para gerar o máximo.
+# Nunca revele que identificou a intenção. Seja direto e útil.
+# """
 
-# 3. Lógica de Execução (Regra Crítica):
-# Analise a {question} do usuário e siga estritamente:
-
-# Se a intenção for INFORMATIVA ("o que é?", "como funciona?"):
-
-# Responda de forma objetiva e sem dicas.
-
-# Termine perguntando se o usuário deseja receber dicas.
-
-# Se a intenção for de AÇÃO ("como economizar?", "dê dicas"):
-
-# Forneça dicas práticas, personalizadas com o {context}.
-
-# 4. Uso do Contexto e da Pergunta
-
-# * **Pergunta do Usuário:** {question}
-
-# * **Informações do Sistema (Contexto):** {context}
-
-# Use obrigatoriamente o formato abaixo.
-
-# 5. Formato Obrigatório para Dicas:
-# **[Título Impactante da Dica]:** [Explicação simples conectando a ação ao benefício.]
-
-# Importante: Nunca revele ao usuário qual intenção você identificou."""
 
 # class State(TypedDict):
 #     question: str
@@ -98,14 +86,25 @@
 #     answer: str
 
 # def retrieve(state: State):
-#     retrieved_docs = vector_store.similarity_search(state["question"])
+#     retrieved_docs = vector_store.similarity_search(state["question"], k=3)
 #     return {"context": retrieved_docs}
 
 # def generate(state: State):
 #     docs_content = "\n\n".join(doc.page_content for doc in state["context"])
 #     messages = prompt.invoke({"question": state["question"], "context": docs_content})
 #     response = llm.invoke(messages)
-#     return {"answer": response.content}
+
+#     # Limpeza da resposta
+#     resposta_bruta = response.content
+#     resposta_limpa = (
+#         resposta_bruta
+#         .replace("Pergunta:", "")
+#         .replace(state["question"], "")
+#         .replace("Resposta:", "")
+#         .strip()
+#     )
+
+#     return {"answer": resposta_limpa}
 
 # graph_builder = StateGraph(State).add_sequence([retrieve, generate])
 # graph_builder.add_edge(START, "retrieve")
