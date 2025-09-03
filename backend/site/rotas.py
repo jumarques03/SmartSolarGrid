@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from simulacoes.status_inversor_simulado import info_inversor
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
 from backend.graficos.graficos import serie_temporal, histograma
-from fastapi import APIRouter
+from backend.IA.llm import assistente_llm
 
 rota_site= APIRouter(prefix="/site")
 
@@ -71,13 +71,11 @@ async def obter_historico_de_consumo():
         return {"mensagem":"Não foi possível carregar o histório de consumo."}
         
 
-# @rota_site.post("/assistente")
-# async def chatbot(pergunta: Pergunta):
-#     estado_final = graph.invoke({"question": pergunta.question})
-#     return {
-#         "pergunta": pergunta.question,
-#         "resposta": estado_final["answer"]
-#     }
+@rota_site.post("/assistente")
+async def chatbot(pergunta: str):
+    dialogo = assistente_llm(info_inversor, pergunta)
+
+    return dialogo
 
 @rota_site.get("/clima")
 async def clima(local: str):

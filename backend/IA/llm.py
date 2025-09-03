@@ -1,30 +1,45 @@
-from huggingface_hub import InferenceClient
+import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 
-# inicializa cliente com seu token
+# Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
-HF_TOKEN = os.getenv("HF_TOKEN")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-client = InferenceClient(token=HF_TOKEN)
+# Configura a API do Google com sua chave
+genai.configure(api_key=GOOGLE_API_KEY)
 
-def gerar_dica(clima: dict, info: dict ):
-    prompt = f"""
-    Você é um assistente de energia inteligente.
-    Aqui estão as condições climáticas atuais:
-    {clima}
+def assistente_llm(info: dict, pergunta: str):
+    system_prompt = f"""
+    Você é um assistente de energia inteligente, sua função é servir de apoio para o usuário e ajudá-lo com explicações, dicas ou recomendações sobre consumo inteligente, uso de inversores hibridos da empresa GoodWe, baterias de armazenamento de energia da empresa GoodWe e paineis solares. O usuário é um utilizador recorrente dessas tecnologias. 
+    Não faça suposições, utilize apenas fatos.
 
-    Aqui estão as informações sobre os aparelhos atuais:
-    {info}
+    Responda sempre em português, em uma frase curta e bem explicativa, sem usar markdown ou formatação especial.
+    """
 
-    Com base nisso, caso o usuário peça uma dica com base no clima, dê uma dica curta, simples e útil sobre como economizar energia otimizar o uso de aparelhos em casa. Caso o usuário peça uma dica no geral, utilize as informações dos aparelhos e do clima para dar essa dica. Responda em português, em uma frase só."""
-
-    resposta = client.text_generation(
-        model="mistralai/Mistral-7B-Instruct-v0.2",  # modelo recomendado
-        inputs=prompt,
-        parameters={
-            "max_new_tokens": 80,
-            "temperature": 0.7
-        }
+    # Configurações de geração de resposta
+    generation_config = {
+        "temperature": 0.7,
+        "max_output_tokens": 100, # Equivalente ao 'max_new_tokens' ou 'max_tokens'
+    }
+    
+    # Inicializa o modelo com a instrução de sistema
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash-latest",
+        system_instruction=system_prompt,
+        generation_config=generation_config
     )
-    return str(resposta)
+
+    try:
+        resposta = model.generate_content(pergunta)
+
+        return {
+            "pergunta": pergunta,
+            "resposta": resposta.text.strip()
+        }
+    
+    except Exception as e:
+        return {
+            "pergunta": pergunta,
+            "resposta": "Desculpe, não consegui processar sua pergunta com o assistente Gemini no momento. Tente novamente mais tarde."
+        }

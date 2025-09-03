@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Request
 from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas, dicas, obter_clima
 from simulacoes.status_inversor_simulado import info_inversor
-from backend.IA.llm import gerar_dica
-
 
 rota_alexa = APIRouter(prefix="/alexa")
 
@@ -44,7 +42,7 @@ async def alexa_webhook(request: Request):
             elif intent_nome == "ClimaIntent":
                 try:
                     cidade = corpo_intent["request"]["intent"]["slots"]["cidade"]["value"]
-                    clima = obter_clima(cidade)  # sua função agora recebe a cidade
+                    clima = obter_clima(cidade)
                     
                     texto_resposta = (
                         f"Em {clima['localizacao']},"
