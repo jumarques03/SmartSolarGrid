@@ -44,7 +44,14 @@ async def alexa_webhook(request: Request):
                 try:
                     cidade = corpo_intent["request"]["intent"]["slots"]["cidade"]["value"]
                     clima = obter_clima(cidade)  # sua função agora recebe a cidade
-                    texto_resposta = f"O clima em {cidade} é: {clima}"
+                    
+                    texto_resposta = (
+                        f"Em {clima['localizacao']}, no período da {clima['periodo_do_dia']}, "
+                        f"o clima é {clima['descricao']}. "
+                        f"A temperatura máxima será de {clima['temperatura_maxima']} graus celcius"
+                        f"e a mínima de {clima['temperatura_minima']}graus celcius. "
+                        f"A chance de chuva é de {clima['chance_de_chuva(%)']} por cento."
+                    )
                 except KeyError:
                     texto_resposta = "Por favor, me diga o nome da cidade que deseja consultar."
 
