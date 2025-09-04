@@ -46,5 +46,8 @@ def extrair_metricas():
 
     return metricas
 
+teste = extrair_metricas()
+
+print(teste)
 
 
