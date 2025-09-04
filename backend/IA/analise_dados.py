@@ -64,9 +64,3 @@ def extrair_metricas():
     metricas["consumo_medio_fim_semana_kWh"] = round(consumo_fim_semana, 2)
     
     return metricas
-
-# Chama a função para obter todas as métricas
-resultados = extrair_metricas()
-
-# Imprime o dicionário completo com todas as métricas
-print(resultados)
