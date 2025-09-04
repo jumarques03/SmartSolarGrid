@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from backend.funcs_auxiliares.funcs_auxiliares import corpo_resposta_para_Alexa, resposta_erro_padrao, ler_cargas, acesso_cargas, dicas, obter_clima
 from simulacoes.status_inversor_simulado import info_inversor
-from backend.IA.llm import assistente_llm_alexa
+
 rota_alexa = APIRouter(prefix="/alexa")
 
 @rota_alexa.post("/")
@@ -22,12 +22,6 @@ async def alexa_webhook(request: Request):
         # 2) IntentRequest (quando o usuário pede algo)
         elif tipo_request == "IntentRequest":
             intent_nome = corpo_intent["request"]["intent"]["name"]
-            
-            # Pega a pergunta do usuário para passar para a IA
-            if 'slots' in corpo_intent['request']['intent'] and 'pergunta' in corpo_intent['request']['intent']['slots']:
-                pergunta_usuario = corpo_intent['request']['intent']['slots']['pergunta']['value']
-            else:
-                pergunta_usuario = "Me dê uma dica de energia." # Pergunta padrão se o slot não for preenchido
 
             if intent_nome == "StatusAparelhosDeEnergiaIntent":
                 infos_inversor = info_inversor()
@@ -38,9 +32,8 @@ async def alexa_webhook(request: Request):
                 )
 
             elif intent_nome == "DicaIntent":
-                # Chama a nova função com a pergunta do usuário
-                resposta_assistente = assistente_llm_alexa(pergunta_usuario)
-                texto_resposta = f"Sua dica é: {resposta_assistente['resposta']}"
+                dica = dicas()
+                texto_resposta = f"Sua dica é: {dica}" 
 
             elif intent_nome == "SaberCargasPrioritariasIntent":
                 cargas = ler_cargas()
