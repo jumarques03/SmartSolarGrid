@@ -66,7 +66,7 @@ def extrair_metricas():
     return metricas
 
 # Chama a função para obter todas as métricas
-resultados = analisar_energia()
+resultados = extrair_metricas()
 
 # Imprime o dicionário completo com todas as métricas
 print(resultados)
