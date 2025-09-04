@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from simulacoes.status_inversor_simulado import info_inversor
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
 from backend.graficos.graficos import serie_temporal, histograma
-from backend.IA.llm import assistente_llm
+from backend.IA.llm import assistente_llm_site
 
 rota_site= APIRouter(prefix="/site")
 
@@ -73,8 +73,7 @@ async def obter_historico_de_consumo():
 
 @rota_site.post("/assistente")
 async def chatbot(pergunta: str):
-    dialogo = assistente_llm(info_inversor, pergunta)
-
+    dialogo = assistente_llm_site(info_inversor, pergunta)
     return dialogo
 
 @rota_site.get("/clima")

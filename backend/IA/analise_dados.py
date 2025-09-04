@@ -4,28 +4,31 @@ import os
 
 load_dotenv()
 caminho = os.getenv("CAMINHO")
-dados= pd.read_excel(caminho)
+dados = pd.read_excel(caminho)
 
 df = pd.DataFrame(dados)
 
+# Converte a coluna 'Horário' para o formato datetime
 df['Horário'] = pd.to_datetime(df['Horário'], format="%d.%m.%Y %H:%M:%S")
-
 df = df.set_index('Horário')
-df2 = df.copy()
 
-df = df.resample('D').mean()
-df2 = df.resample('h').sum()
+# Converte a coluna 'Carga(W)' para 'Carga(kWh)', já que os dados são a cada 5 minutos (1/12 de uma hora)
+df['Carga(kWh)'] = df['Carga(W)'] * (5 / 60) / 1000
+
+# Resample e soma os valores diários
+df_diario = df.resample('D').sum()
 
 def extrair_metricas():
     metricas = {}
 
     # --- MÉTRICAS DIÁRIAS ---
-    metricas["consumo_medio"] = round(df["Carga(W)"].mean(), 2)
-    metricas["soc_medio"] = round(df["SOC(%)"].mean(), 2)
-    metricas["geracao_solar_media"] = round(df["FV(W)"].mean(), 2)
+    # O consumo médio diário em kWh é a média da soma diária
+    metricas["consumo_medio_diario"] = round(df_diario["Carga(kWh)"].mean(), 2)
+    metricas["geracao_solar_media_diaria"] = round((df_diario["FV(W)"] * (5 / 60) / 1000).mean(), 2)
 
     # --- MÉTRICAS HORÁRIAS ---
-    consumo_por_hora = df2.groupby(df2.index.hour)["Carga(W)"].mean()
+    # Calcula a soma do consumo por hora para identificar os picos
+    consumo_por_hora = df.groupby(df.index.hour)["Carga(kWh)"].sum()
 
     # Top 3 horas de maior consumo
     top_horas = consumo_por_hora.sort_values(ascending=False).head(3)
@@ -33,21 +36,19 @@ def extrair_metricas():
     valor_medio_pico = top_horas.mean()
 
     metricas["horarios_pico_consumo"] = horas_pico
-    metricas["valor_medio_pico"] = round(valor_medio_pico, 2)
+    metricas["valor_medio_pico_kWh"] = round(valor_medio_pico, 2)
 
     # --- CONSUMO SEMANA VS FIM DE SEMANA ---
-    df_copia = df.copy()
+    df_copia = df_diario.copy()
     df_copia["dia_semana"] = df_copia.index.dayofweek
-    semana = df_copia[df_copia["dia_semana"] < 5]["Carga(W)"].mean()
-    fim_semana = df_copia[df_copia["dia_semana"] >= 5]["Carga(W)"].mean()
+    semana = df_copia[df_copia["dia_semana"] < 5]["Carga(kWh)"].mean()
+    fim_semana = df_copia[df_copia["dia_semana"] >= 5]["Carga(kWh)"].mean()
 
-    metricas["consumo_medio_semana"] = round(semana, 2)
-    metricas["consumo_medio_fim_semana"] = round(fim_semana, 2)
+    metricas["consumo_medio_semana_kWh"] = round(semana, 2)
+    metricas["consumo_medio_fim_semana_kWh"] = round(fim_semana, 2)
 
     return metricas
 
 teste = extrair_metricas()
 
 print(teste)
-
-
