@@ -36,10 +36,10 @@ def extrair_metricas():
     metricas["valor_medio_pico"] = round(valor_medio_pico, 2)
 
     # --- CONSUMO SEMANA VS FIM DE SEMANA ---
-    df = df.copy()
-    df["dia_semana"] = df.index.dayofweek
-    semana = df[df["dia_semana"] < 5]["Carga(W)"].mean()
-    fim_semana = df[df["dia_semana"] >= 5]["Carga(W)"].mean()
+    df_copia = df.copy()
+    df_copia["dia_semana"] = df_copia.index.dayofweek
+    semana = df_copia[df_copia["dia_semana"] < 5]["Carga(W)"].mean()
+    fim_semana = df_copia[df_copia["dia_semana"] >= 5]["Carga(W)"].mean()
 
     metricas["consumo_medio_semana"] = round(semana, 2)
     metricas["consumo_medio_fim_semana"] = round(fim_semana, 2)
