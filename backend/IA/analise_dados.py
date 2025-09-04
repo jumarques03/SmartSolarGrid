@@ -2,7 +2,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 
-def analisar_energia():
+def extrair_metricas():
     """
     Carrega os dados de energia, processa as métricas de consumo e geração,
     e identifica os horários de pico e o uso da bateria e da rede.
