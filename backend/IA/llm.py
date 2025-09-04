@@ -1,6 +1,7 @@
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from backend.IA.analise_dados import extrair_metricas
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -10,9 +11,14 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 def assistente_llm(info: dict, pergunta: str):
+    metricas = extrair_metricas()
+
     system_prompt = f"""
+
+    metricas = {metricas}
+
     Você é um assistente de energia inteligente, sua função é servir de apoio para o usuário e ajudá-lo com explicações, dicas ou recomendações sobre consumo inteligente, uso de inversores hibridos da empresa GoodWe, baterias de armazenamento de energia da empresa GoodWe e paineis solares. O usuário é um utilizador recorrente dessas tecnologias. 
-    Não faça suposições, utilize apenas fatos.
+    Não faça suposições, utilize apenas fatos e as metricas fornecidas a você.
 
     Responda sempre em português, em uma frase curta e bem explicativa, sem usar markdown ou formatação especial.
     """
