@@ -4,7 +4,7 @@ import seaborn as sns
 from dotenv import load_dotenv
 import os
 import io
-import base64
+from fastapi.responses import StreamingResponse
 
 load_dotenv()
 caminho = os.getenv("CAMINHO")
@@ -32,7 +32,7 @@ def serie_temporal(valor: str, cor: str, titulo: str, x: str, y: str):
     buf.seek(0)
     plt.close(fig)
 
-    return base64.b64encode(buf.getvalue()).decode("utf-8")
+    return StreamingResponse(buf, media_type="image/png")
 
 
 def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
@@ -48,5 +48,4 @@ def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: 
     buf.seek(0)
     plt.close(fig)
 
-    return base64.b64encode(buf.getvalue()).decode("utf-8")
-
+    return StreamingResponse(buf, media_type="image/png")
