@@ -46,31 +46,46 @@ async def remover_carga_prioritaria(carga_id: str):
     except:
         return {"mensagem":"Não foi possível deletar sua carga prioritária."}
 
-@rota_site.get("/historico_de_consumo")
+@rota_site.get("/geracao_solar")
 async def obter_historico_de_consumo():
     try: 
-        # graficos = {}
-
         geracao_solar_grafico =  serie_temporal('FV(W)', 'g', 'Geração Solar(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
         return geracao_solar_grafico
-        # graficos['geracao_solar'] = geracao_solar_grafico 
-
-        # energia_consumida_concessionaria_grafico = serie_temporal('Rede elétrica (W)', 'r', 'Energia Comprada da Concessionária(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        # graficos['energia_consumida'] = energia_consumida_concessionaria_grafico 
-
-        # carga_consumida_grafico = serie_temporal('Carga(W)','b','Consumo da Residência(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        # graficos['carga_consumida'] = carga_consumida_grafico
-
-        # dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        # graficos['dados_bateria'] = dados_bateria_grafico
-        
-        # nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
-        # graficos['nivel_bateria'] = nivel_bateria_grafico
-
-        # return {"graficos": graficos}
     except:
-        return {"mensagem":"Não foi possível carregar o histório de consumo."}
-        
+        return {"mensagem":"Não foi possível o gráfico!"}
+    
+@rota_site.get("/energia_consumida_concessionaria")
+async def obter_historico_de_consumo():
+    try:
+        energia_consumida_concessionaria_grafico = serie_temporal('Rede elétrica (W)', 'r', 'Energia Comprada da Concessionária(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        return energia_consumida_concessionaria_grafico
+    except:
+        return {"mensagem":"Não foi possível o gráfico!"}
+    
+@rota_site.get("/carga_consumida")
+async def obter_historico_de_consumo():
+    try:
+        carga_consumida_grafico = serie_temporal('Carga(W)','b','Consumo da Residência(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        return carga_consumida_grafico
+    except:
+        return {"mensagem":"Não foi possível o gráfico!"}
+
+@rota_site.get("/dados_bateria")
+async def obter_historico_de_consumo():
+    try:
+        dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        return dados_bateria_grafico
+    except:
+        return {"mensagem":"Não foi possível o gráfico!"}
+
+@rota_site.get("/nivel_bateria")
+async def obter_historico_de_consumo():
+    try:
+        nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
+        return nivel_bateria_grafico
+    except:
+        return {"mensagem":"Não foi possível o gráfico!"}
+
 
 @rota_site.post("/assistente")
 async def chatbot(pergunta: str):
