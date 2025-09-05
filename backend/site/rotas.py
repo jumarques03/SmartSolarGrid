@@ -1,5 +1,5 @@
 from fastapi import APIRouter 
-from simulacoes.status_inversor_simulado import info_inversor
+from simulacoes.status_aparelhos import infos
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
 from backend.graficos.graficos import serie_temporal, histograma
 from backend.IA.llm import assistente_llm_site
@@ -7,9 +7,9 @@ from backend.IA.llm import assistente_llm_site
 rota_site= APIRouter(prefix="/site")
 
 @rota_site.get("/status-inversor")
-async def obter_status_inversor():
+async def status_aparelhos():
     try:
-        return info_inversor()
+        return infos()
     except:
         return {"mensagem":"Não foi possível obter as informações sobre seu inversor e bateria."}
 
@@ -73,11 +73,16 @@ async def obter_historico_de_consumo():
 
 @rota_site.post("/assistente")
 async def chatbot(pergunta: str):
-    dialogo = assistente_llm_site(info_inversor, pergunta)
-    return dialogo
+    try:
+        dialogo = assistente_llm_site(infos, pergunta)
+        return dialogo
+    except:
+        return {"mensagem":"Desculpe não consegui processar sua pergunta. Tente novamente mais tarde!"}
 
 @rota_site.get("/clima")
 async def clima(local: str):
-    clima = obter_clima(local)
-
-    return clima
+    try:
+        clima = obter_clima(local)
+        return clima
+    except:
+        return {"mensagem":"Não foi possível acessar as informações do clima de sua cidade."}

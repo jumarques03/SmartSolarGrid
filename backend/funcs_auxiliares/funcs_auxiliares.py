@@ -83,27 +83,25 @@ def dicas():
     return dicas[n]
 
 def obter_clima(cidade: str):
-    try:
-        load_dotenv()
-        chave_api = os.getenv("API_KEY")
+    load_dotenv()
+    chave_api = os.getenv("API_KEY")
 
-        url = f"https://api.hgbrasil.com/weather?key={chave_api}&city_name={cidade}" # Ex de local: Diadema,SP --> Aceita apenas cidades
-        resposta = requests.get(url)
-        resposta = resposta.json()
+    url = f"https://api.hgbrasil.com/weather?key={chave_api}&city_name={cidade}" # Ex de local: Diadema,SP --> Aceita apenas cidades
+    resposta = requests.get(url)
+    resposta = resposta.json()
 
 
-        clima = {
-            "localizacao": resposta['results']['city'],
-            "periodo_do_dia": resposta['results']['currently'],
-            "descricao": f"{resposta['results']['forecast'][0]['description']}",
-            "dia": resposta['results']['date'],
-            "temperatura_maxima": f"{resposta['results']['forecast'][0]['max']}°C",
-            "temperatura_minima": f"{resposta['results']['forecast'][0]['min']}°C",
-            "preciptacao_total_(mm)": f"{resposta['results']['forecast'][0]['rain']}mm",
-            "cobertura_de_nuvens(%)": f"{resposta['results']['forecast'][0]['cloudiness']}%",
-            "chance_de_chuva(%)": f"{resposta['results']['forecast'][0]['rain_probability']}%"
-        }
+    clima = {
+        "localizacao": resposta['results']['city'],
+        "periodo_do_dia": resposta['results']['currently'],
+        "descricao": f"{resposta['results']['forecast'][0]['description']}",
+        "dia": resposta['results']['date'],
+        "temperatura_maxima": f"{resposta['results']['forecast'][0]['max']}°C",
+        "temperatura_minima": f"{resposta['results']['forecast'][0]['min']}°C",
+        "preciptacao_total_(mm)": f"{resposta['results']['forecast'][0]['rain']}mm",
+        "cobertura_de_nuvens(%)": f"{resposta['results']['forecast'][0]['cloudiness']}%",
+        "chance_de_chuva(%)": f"{resposta['results']['forecast'][0]['rain_probability']}%"
+    }
 
-        return clima
-    except:
-        return {"mensagem":"Não foi possível acessar as informações do clima de sua cidade."}
+    return clima
+   

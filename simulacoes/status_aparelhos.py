@@ -1,10 +1,9 @@
 import pandas as pd
 import random
-import openpyxl
 from dotenv import load_dotenv
 import os
 
-def info_inversor():
+def infos():
     load_dotenv()
     caminho = os.getenv("CAMINHO")
     dados= pd.read_excel(caminho)
