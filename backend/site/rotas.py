@@ -49,22 +49,22 @@ async def remover_carga_prioritaria(carga_id: str):
 @rota_site.get("/historico_de_consumo")
 async def obter_historico_de_consumo():
     try: 
-        graficos = []
+        graficos = {}
 
         geracao_solar_grafico =  serie_temporal('FV(W)', 'g', 'Geração Solar(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        graficos.append(geracao_solar_grafico) 
+        graficos['geracao_solar'] = geracao_solar_grafico 
 
         energia_consumida_concessionaria_grafico = serie_temporal('Rede elétrica (W)', 'r', 'Energia Comprada da Concessionária(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        graficos.append(energia_consumida_concessionaria_grafico) 
+        graficos['energia_consumida'] = energia_consumida_concessionaria_grafico 
 
         carga_consumida_grafico = serie_temporal('Carga(W)','b','Consumo da Residência(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        graficos.append(carga_consumida_grafico)
+        graficos['carga_consumida'] = carga_consumida_grafico
 
         dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
-        graficos.append(dados_bateria_grafico) #LEGENDA????
+        graficos['dados_bateria'] = dados_bateria_grafico
         
         nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
-        graficos.append(nivel_bateria_grafico)
+        graficos['nivel_bateria'] = nivel_bateria_grafico
 
         return {"graficos": graficos}
     except:
