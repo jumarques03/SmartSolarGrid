@@ -91,7 +91,8 @@ async def obter_historico_de_consumo():
 @rota_site.post("/assistente")
 async def chatbot(pergunta: str):
     try:
-        dialogo = assistente_llm_site(infos, pergunta)
+        info_aparelhos = infos()
+        dialogo = assistente_llm_site(info_aparelhos, pergunta)
         return dialogo
     except:
         return {"mensagem":"Desculpe não consegui processar sua pergunta. Tente novamente mais tarde!"}
