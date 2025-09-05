@@ -66,7 +66,7 @@ async def obter_historico_de_consumo():
         nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
         graficos.append(nivel_bateria_grafico)
 
-        return graficos
+        return {"graficos": graficos}
     except:
         return {"mensagem":"Não foi possível carregar o histório de consumo."}
         
