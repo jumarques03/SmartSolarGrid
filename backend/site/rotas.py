@@ -6,7 +6,7 @@ from backend.IA.llm import assistente_llm_site
 
 rota_site= APIRouter(prefix="/site")
 
-@rota_site.get("/status-inversor")
+@rota_site.get("/status_aparelhos")
 async def status_aparelhos():
     try:
         return infos()
@@ -24,7 +24,7 @@ async def escolher_carga_prioritaria(dispositivo: str):
     except:
         return {"mensagem":"Não foi possível registrar sua carga prioritária."}
         
-@rota_site.get("/lista-cargas-prioritarias")
+@rota_site.get("/lista_cargas_prioritarias")
 async def listar_cargas_prioritarias():
     try:
         cargas = ler_cargas()
