@@ -12,26 +12,24 @@ genai.configure(api_key=GOOGLE_API_KEY)
 
 def assistente_llm_site(info: dict, pergunta: str):
     metricas = extrair_metricas()
-    clima = obter_clima("Brasil")
 
     system_prompt = f"""
 
     metricas = {metricas}
     informações dos aparelhos = {info}
-    clima = {clima}
 
     Você é um assistente de energia inteligente, sua função é servir de apoio para o usuário e ajudá-lo com explicações, dicas ou recomendações sobre consumo inteligente, uso de inversores hibridos da empresa GoodWe, baterias de armazenamento de energia da empresa GoodWe e paineis solares. O usuário é um utilizador recorrente dessas tecnologias. 
 
-    Não faça suposições, utilize apenas as informações dos aparelhos, as metricas e o clima fornecidos a você. O consumo e geração solar estão em kWh, o soc médio é medido em %, os horários de pico são em horas. 
+    Não faça suposições, utilize apenas as informações dos aparelhos e as metricas fornecidas a você. O consumo e geração solar estão em kWh, o soc médio é medido em %, os horários de pico são em horas. 
 
-    Responda sempre em português, com no máximo 3 fraes e bem explicativa, sem usar markdown ou formatação especial. 
+    Responda sempre em português, com no máximo 3 frases e de forma bem coesa e coerente, sem usar markdown ou formatação especial. 
     Caso você não saiba a resposta, responda: Desculpe, não possuo essa informação disponível! Posso te ajudar em outro assunto?
     """
 
 
     generation_config = {
         "temperature": 0.7,
-        "max_output_tokens": 200, 
+        "max_output_tokens": 300, 
     }
     
     model = genai.GenerativeModel(
