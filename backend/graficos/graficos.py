@@ -32,6 +32,8 @@ def serie_temporal(valor: str, cor: str, titulo: str, x: str, y: str):
     buf.seek(0)
     plt.close(fig)
 
+    return base64.b64encode(buf.getvalue()).decode("utf-8")
+
 
 def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
     plt.hist(df2[valor], bins=intervalo, alpha=0.7, color='lightcoral', edgecolor='black')
@@ -45,3 +47,6 @@ def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: 
     fig.savefig(buf, format="png")
     buf.seek(0)
     plt.close(fig)
+
+    return base64.b64encode(buf.getvalue()).decode("utf-8")
+
