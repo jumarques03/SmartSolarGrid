@@ -1,7 +1,7 @@
 from fastapi import APIRouter 
 from simulacoes.status_aparelhos import infos
 from backend.funcs_auxiliares.funcs_auxiliares import ler_cargas, salvar_cargas_prioritarias, reorganizar_indices, obter_clima
-from backend.graficos.graficos import serie_temporal, histograma
+from backend.graficos.graficos import serie_temporal, histograma, grafico_bateria
 from backend.IA.llm import assistente_llm_site
 
 rota_site= APIRouter(prefix="/site")
@@ -46,6 +46,7 @@ async def remover_carga_prioritaria(carga_id: str):
     except:
         return {"mensagem":"Não foi possível deletar sua carga prioritária."}
 
+
 @rota_site.get("/geracao_solar")
 async def obter_historico_de_consumo():
     try: 
@@ -73,7 +74,7 @@ async def obter_historico_de_consumo():
 @rota_site.get("/dados_bateria")
 async def obter_historico_de_consumo():
     try:
-        dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
+        dados_bateria_grafico= grafico_bateria()
         return dados_bateria_grafico
     except:
         return {"mensagem":"Não foi possível o gráfico!"}
