@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from dotenv import load_dotenv
 import os
+import io
+import base64
 
 load_dotenv()
 caminho = os.getenv("CAMINHO")
@@ -23,7 +25,13 @@ def serie_temporal(valor: str, cor: str, titulo: str, x: str, y: str):
     plt.grid(True) 
     plt.xticks(rotation=45)
     plt.tight_layout() 
-    plt.show()
+
+    fig = plt.gcf()
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    plt.close(fig)
+
 
 def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: str):
     plt.hist(df2[valor], bins=intervalo, alpha=0.7, color='lightcoral', edgecolor='black')
@@ -31,4 +39,9 @@ def histograma(valor: str, intervalo:int, titulo: str, x: str, y: str, legenda: 
     plt.xlabel(x)
     plt.ylabel(y)
     plt.tight_layout() 
-    plt.show()
+
+    fig = plt.gcf()
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    plt.close(fig)
