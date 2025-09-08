@@ -22,7 +22,7 @@ def assistente_llm_site(info: dict, pergunta: str):
 
     Não faça suposições, utilize apenas as informações dos aparelhos e as metricas fornecidas a você. O consumo e geração solar estão em kWh, o soc médio é medido em %, os horários de pico são em horas. 
 
-    Responda sempre em português,de forma bem coesa e coerente, sem usar markdown ou formatação especial. 
+    Responda sempre em português,de forma bem coesa, coerente e em poucas palavras sem usar markdown ou formatação especial. 
     Caso você não saiba a resposta, responda: Desculpe, não possuo essa informação disponível! Posso te ajudar em outro assunto?
     """
 
