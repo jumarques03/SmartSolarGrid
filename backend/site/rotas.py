@@ -53,7 +53,7 @@ async def obter_historico_de_consumo():
         geracao_solar_grafico =  serie_temporal('FV(W)', 'g', 'Geração Solar(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
         return geracao_solar_grafico
     except:
-        return {"mensagem":"Não foi possível o gráfico!"}
+        return {"mensagem":"Não foi possível carregar o gráfico!"}
     
 @rota_site.get("/energia_consumida_concessionaria")
 async def obter_historico_de_consumo():
@@ -61,7 +61,7 @@ async def obter_historico_de_consumo():
         energia_consumida_concessionaria_grafico = serie_temporal('Rede elétrica (W)', 'r', 'Energia Comprada da Concessionária(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
         return energia_consumida_concessionaria_grafico
     except:
-        return {"mensagem":"Não foi possível o gráfico!"}
+        return {"mensagem":"Não foi possível carregar o gráfico!"}
     
 @rota_site.get("/carga_consumida")
 async def obter_historico_de_consumo():
@@ -69,7 +69,7 @@ async def obter_historico_de_consumo():
         carga_consumida_grafico = serie_temporal('Carga(W)','b','Consumo da Residência(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
         return carga_consumida_grafico
     except:
-        return {"mensagem":"Não foi possível o gráfico!"}
+        return {"mensagem":"Não foi possível carregar o gráfico!"}
 
 @rota_site.get("/dados_bateria")
 async def obter_historico_de_consumo():
@@ -77,15 +77,15 @@ async def obter_historico_de_consumo():
         dados_bateria_grafico=serie_temporal('Dados da Bateria(W)','orange', 'Uso da Bateria(W) por Dia no Mês de Agosto', 'Dia', 'Watts')
         return dados_bateria_grafico
     except:
-        return {"mensagem":"Não foi possível o gráfico!"}
+        return {"mensagem":"Não foi possível carregar o gráfico!"}
 
 @rota_site.get("/nivel_bateria")
 async def obter_historico_de_consumo():
     try:
-        nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência', None)
+        nivel_bateria_grafico = histograma('SOC(%)', 10, 'Nível de Bateria(%) no Mês de Agosto ', 'Porcentagem da Bateria', 'Frequência')
         return nivel_bateria_grafico
     except:
-        return {"mensagem":"Não foi possível o gráfico!"}
+        return {"mensagem":"Não foi possível carregar o gráfico!"}
 
 
 @rota_site.post("/assistente")
